@@ -1,0 +1,45 @@
+# Default configuration for Drag-and-Drop LLM system
+# Following exact paper specifications
+
+model:
+  foundation_model: "Qwen/Qwen2.5-0.5B"
+  text_encoder: "sentence-transformers/all-MiniLM-L6-v2"
+  lora_rank: 8
+  lora_alpha: 16.0
+  prompt_batch_length: 128
+
+training:
+  num_epochs: 5000
+  batch_size: 128
+  learning_rate: 3e-5
+  weight_decay: 0.1
+  max_grad_norm: 1.0
+  noise_aug_amplitude: 1e-4
+  save_every: 1000
+
+evaluation:
+  datasets: 
+    - "ARC-e"
+    - "OBQA" 
+    - "PIQA"
+    - "HellaSwag"
+    - "BoolQ"
+    - "WinoGrande"
+    - "ARC-c"
+  batch_size: 64
+  metrics:
+    - "accuracy"
+    - "pass@k"
+    - "bleu"
+
+# System configuration
+device: "cuda"  # cuda, cpu, or mps
+seed: 42
+output_dir: "./outputs"
+log_level: "INFO"
+
+# Experimental settings
+experiment:
+  name: "dnd_llm_baseline"
+  description: "Baseline Drag-and-Drop LLM experiment"
+  tags: ["baseline", "qwen", "sentence-bert"] 

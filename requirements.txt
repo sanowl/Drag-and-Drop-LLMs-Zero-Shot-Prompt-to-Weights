@@ -1,0 +1,15 @@
+torch>=2.0.0
+torch-audio>=2.0.0
+transformers>=4.30.0
+sentence-transformers>=2.2.0
+numpy>=1.21.0
+datasets>=2.10.0
+evaluate>=0.4.0
+tqdm>=4.64.0
+scikit-learn>=1.1.0
+matplotlib>=3.5.0
+seaborn>=0.11.0
+wandb>=0.15.0
+accelerate>=0.20.0
+peft>=0.4.0
+bitsandbytes>=0.39.0 
