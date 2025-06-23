@@ -188,7 +188,7 @@ The system uses YAML configuration files for easy customization. See `configs/de
   title={Drag-and-Drop LLMs: Zero-Shot Prompt to Weights},
   author={Research Team},
   journal={arXiv preprint},
-  year={2024}
+  year={2025}
 }
 ```
 
