@@ -5,9 +5,9 @@ Dataset management and loading utilities.
 import torch
 from torch.utils.data import Dataset
 from typing import List, Dict, Tuple
-import random
 import logging
 from datasets import load_dataset
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -122,10 +122,10 @@ class PromptCheckpointPairDataset(Dataset):
                 for _ in range(100):  # Generate 100 pairs per dataset
                     # Randomly pick prompt batch
                     batch_size = min(self.prompt_batch_length, len(prompts))
-                    prompt_batch = random.sample(prompts, batch_size)
+                    prompt_batch = secrets.SystemRandom().sample(prompts, batch_size)
                     
                     # Randomly pick checkpoint
-                    checkpoint = random.choice(dataset_checkpoints)
+                    checkpoint = secrets.choice(dataset_checkpoints)
                     
                     pairs.append((prompt_batch, checkpoint))
         

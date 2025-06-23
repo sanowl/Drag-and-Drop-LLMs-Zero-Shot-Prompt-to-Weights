@@ -7,9 +7,9 @@ import argparse
 import os
 import sys
 import torch
-import random
 import numpy as np
 from pathlib import Path
+import secrets
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -27,7 +27,7 @@ def set_seed(seed: int):
     """Set random seeds for reproducibility"""
     torch.manual_seed(seed)
     np.random.seed(seed)
-    random.seed(seed)
+    secrets.SystemRandom().seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed(seed)
         torch.cuda.manual_seed_all(seed)

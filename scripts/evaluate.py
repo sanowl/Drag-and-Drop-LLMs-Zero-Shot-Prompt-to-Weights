@@ -8,8 +8,8 @@ import os
 import sys
 import torch
 import json
-import random
 from pathlib import Path
+import secrets
 
 # Add parent directory to path for imports
 sys.path.append(str(Path(__file__).parent.parent))
@@ -86,8 +86,7 @@ def main():
         for dataset_name in eval_datasets:
             if dataset_name in common_sense_datasets:
                 # Sample test prompts
-                test_prompts = random.sample(
-                    common_sense_datasets[dataset_name], 
+                test_prompts = secrets.SystemRandom().sample(common_sense_datasets[dataset_name], 
                     min(100, len(common_sense_datasets[dataset_name]))
                 )
                 
@@ -97,8 +96,7 @@ def main():
     # Coding evaluation
     if args.task in ['coding', 'all']:
         print("Evaluating coding tasks...")
-        coding_test_prompts = random.sample(
-            coding_datasets['Evol-Instruct-68K-V1'], 164  # HumanEval size
+        coding_test_prompts = secrets.SystemRandom().sample(coding_datasets['Evol-Instruct-68K-V1'], 164  # HumanEval size
         )
         coding_result = evaluator.evaluate_coding(coding_test_prompts, "HumanEval")
         results["coding_HumanEval"] = coding_result
@@ -106,7 +104,7 @@ def main():
     # Math evaluation  
     if args.task in ['math', 'all']:
         print("Evaluating math tasks...")
-        math_test_prompts = random.sample(math_datasets['Competition-Math'], 100)
+        math_test_prompts = secrets.SystemRandom().sample(math_datasets['Competition-Math'], 100)
         
         gsm8k_result = evaluator.evaluate_math(math_test_prompts, "gsm8K")
         math_result = evaluator.evaluate_math(math_test_prompts, "MATH")
