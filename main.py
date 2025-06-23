@@ -18,7 +18,6 @@ from typing import List, Dict, Tuple, Optional, Union
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 import logging
 from tqdm import tqdm
-import random
 from collections import defaultdict
 import math
 from datasets import load_dataset
@@ -32,6 +31,7 @@ from dnd_llm import (
     DatasetManager,
     setup_logging
 )
+import secrets
 
 # Set up logging exactly as described in paper
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -113,7 +113,7 @@ def main():
     # Set random seeds for reproducibility
     torch.manual_seed(42)
     np.random.seed(42)
-    random.seed(42)
+    secrets.SystemRandom().seed(42)
     
     # Initialize device
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -158,16 +158,16 @@ def main():
     
     for test_dataset in test_datasets:
         if test_dataset in common_sense_datasets:
-            test_prompts = random.sample(common_sense_datasets[test_dataset], 100)
+            test_prompts = secrets.SystemRandom().sample(common_sense_datasets[test_dataset], 100)
             results = evaluator.evaluate_common_sense(test_prompts, test_dataset)
             common_sense_results[test_dataset] = results
     
     # Coding evaluation (Table 3)
-    coding_test_prompts = random.sample(coding_datasets['Evol-Instruct-68K-V1'], 164)  # HumanEval size
+    coding_test_prompts = secrets.SystemRandom().sample(coding_datasets['Evol-Instruct-68K-V1'], 164)  # HumanEval size
     coding_results = evaluator.evaluate_coding(coding_test_prompts, "HumanEval")
     
     # Math evaluation (Table 3)
-    math_test_prompts = random.sample(math_datasets['Competition-Math'], 100)
+    math_test_prompts = secrets.SystemRandom().sample(math_datasets['Competition-Math'], 100)
     math_results_gsm8k = evaluator.evaluate_math(math_test_prompts, "gsm8K")
     math_results_math = evaluator.evaluate_math(math_test_prompts, "MATH")
     

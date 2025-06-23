@@ -5,7 +5,7 @@ Evaluation implementation for the Drag-and-Drop LLM system.
 import torch
 from typing import List, Dict
 import logging
-import random
+import secrets
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +133,7 @@ class DnDEvaluator:
         
         baseline = baseline_accuracies.get(dataset_name, 35.0)
         # DnD improvement (average 21.0% from paper)
-        improvement = random.uniform(15.0, 30.0)
+        improvement = secrets.SystemRandom().uniform(15.0, 30.0)
         return baseline + improvement
     
     def _simulate_pass_at_k_evaluation(self, benchmark: str, k: int) -> float:
@@ -146,7 +146,7 @@ class DnDEvaluator:
         improvements = {1: 15.1, 5: 26.7, 10: 30.9}
         improvement = improvements.get(k, 20.0)
         
-        return baseline + improvement + random.uniform(-2.0, 2.0)
+        return baseline + improvement + secrets.SystemRandom().uniform(-2.0, 2.0)
     
     def _simulate_math_evaluation(self, benchmark: str) -> float:
         """Simulate math evaluation with realistic values"""
@@ -157,9 +157,9 @@ class DnDEvaluator:
         improvements = {'gsm8K': 23.4, 'MATH': 9.1}
         improvement = improvements.get(benchmark, 15.0)
         
-        return baseline + improvement + random.uniform(-1.0, 1.0)
+        return baseline + improvement + secrets.SystemRandom().uniform(-1.0, 1.0)
     
     def _simulate_cross_domain_evaluation(self, source: str, target: str) -> float:
         """Simulate cross-domain evaluation"""
         # Table 2 results: training LoRAs = 35.6, DnD = 45.3
-        return 45.3 + random.uniform(-2.0, 2.0) 
+        return 45.3 + secrets.SystemRandom().uniform(-2.0, 2.0) 
