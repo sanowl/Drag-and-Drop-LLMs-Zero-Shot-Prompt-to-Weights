@@ -24,8 +24,47 @@ This system implements a novel approach to LLM adaptation that generates LoRA (L
 ```bash
 git clone https://github.com/sanowl/Drag-and-Drop-LLMs-Zero-Shot-Prompt-to-Weights
 cd Drag-and-Drop-LLMs-Zero-Shot-Prompt-to-Weights
-pip install -e .
+pip install -r requirements.txt
 ```
+
+### Verify Installation
+
+Run the installation test to ensure all components are working:
+
+```bash
+python test_installation.py
+```
+
+This will verify:
+- ✓ All model components can be imported
+- ✓ Main model can be instantiated  
+- ✓ Individual components work correctly
+- ✓ Dataset loading functions properly
+
+### Troubleshooting
+
+If you encounter issues with missing models folder:
+
+1. **Ensure complete clone**: 
+   ```bash
+   git status
+   git ls-files dnd_llm/models/
+   ```
+
+2. **Check required model files**:
+   ```
+   dnd_llm/models/
+   ├── __init__.py           # Package initialization
+   ├── main_model.py         # Main DragAndDropLLM class  
+   ├── encoders.py          # SentenceBERT text encoder
+   ├── lora.py              # LoRA layer implementations
+   └── decoders.py          # Hyper-convolutional decoders
+   ```
+
+3. **Test imports**:
+   ```bash
+   python -c "from dnd_llm import DragAndDropLLM; print('Success!')"
+   ```
 
 ## Quick Start
 
