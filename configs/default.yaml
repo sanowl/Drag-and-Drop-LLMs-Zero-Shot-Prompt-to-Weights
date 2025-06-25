@@ -1,45 +1,130 @@
-# Default configuration for Drag-and-Drop LLM system
-# Following exact paper specifications
+# Drag-and-Drop LLM Configuration
+# Complete implementation following paper methodology
 
-model:
-  foundation_model: "Qwen/Qwen2.5-0.5B"
-  text_encoder: "sentence-transformers/all-MiniLM-L6-v2"
-  lora_rank: 8
-  lora_alpha: 16.0
-  prompt_batch_length: 128
+# Model Configuration
+foundation_model: "Qwen/Qwen2.5-0.5B"  # Foundation model to use
+text_encoder: "sentence-transformers/all-MiniLM-L6-v2"  # Text encoder for prompt embeddings
+lora_rank: 8  # LoRA rank parameter
+lora_alpha: 16.0  # LoRA alpha parameter
+load_pretrained: true  # Whether to load pretrained foundation model
 
+# Training Configuration
 training:
-  num_epochs: 5000
-  batch_size: 128
-  learning_rate: 3e-5
-  weight_decay: 0.1
-  max_grad_norm: 1.0
-  noise_aug_amplitude: 1e-4
-  save_every: 1000
+  num_epochs: 5000  # Training epochs (Table 7)
+  batch_size: 128  # Batch size (Table 7) 
+  learning_rate: 1e-4  # Learning rate
+  warmup_steps: 1000  # Warmup steps
+  weight_decay: 0.01  # Weight decay
+  gradient_clipping: 1.0  # Gradient clipping
+  save_steps: 1000  # Save checkpoint every N steps
+  eval_steps: 500  # Evaluate every N steps
+  logging_steps: 100  # Log every N steps
+  
+  # Optimizer settings
+  optimizer: "adamw"  # Optimizer type
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_epsilon: 1e-8
+  
+  # Learning rate scheduler
+  lr_scheduler: "linear"  # cosine, linear, constant
+  
+  # Noise augmentation (Section 2.6)
+  noise_std: 0.02  # Standard deviation for noise augmentation
+  noise_probability: 0.5  # Probability of applying noise
 
+# Dataset Configuration
+datasets:
+  max_train_samples: 5000  # Max samples per dataset for training
+  max_eval_samples: 1000  # Max samples per dataset for evaluation
+  test_size: 0.2  # Test split ratio
+  prompt_batch_length: 128  # Number of prompts per batch (Table 7)
+  checkpoints_per_dataset: 10  # Number of checkpoints per dataset
+  use_cache: true  # Whether to use dataset caching
+  
+  # Dataset-specific settings
+  common_sense:
+    enabled: true
+    datasets: ["ARC-e", "ARC-c", "BoolQ", "HellaSwag", "PIQA", "WinoGrande", "OBQA"]
+  
+  coding:
+    enabled: true
+    datasets: ["HumanEval", "Evol-Instruct-68K-V1"]
+  
+  math:
+    enabled: true
+    datasets: ["GSM8K", "Competition-Math"]
+
+# Evaluation Configuration
 evaluation:
-  datasets: 
-    - "ARC-e"
-    - "OBQA" 
-    - "PIQA"
-    - "HellaSwag"
-    - "BoolQ"
-    - "WinoGrande"
-    - "ARC-c"
-  batch_size: 64
+  eval_batch_size: 100  # Batch size for evaluation
+  temperature: 0.1  # Temperature for evaluation generation
+  max_length: 512  # Max generation length
+  do_sample: false  # Whether to use sampling during evaluation
+  
+  # Metrics configuration
   metrics:
-    - "accuracy"
-    - "pass@k"
-    - "bleu"
+    accuracy: true
+    pass_at_k: [1, 5, 10]  # For coding evaluation
+    bleu: true  # For text generation
+    
+  # Cross-domain evaluation
+  cross_domain:
+    enabled: true
+    source_domain: "common_sense"
+    target_domain: "science"
 
-# System configuration
-device: "cuda"  # cuda, cpu, or mps
-seed: 42
-output_dir: "./outputs"
-log_level: "INFO"
+# Inference Configuration
+inference:
+  max_length: 256  # Max generation length
+  temperature: 0.7  # Sampling temperature
+  do_sample: true  # Whether to use sampling
+  top_p: 0.9  # Top-p sampling
+  top_k: 50  # Top-k sampling
+  repetition_penalty: 1.1  # Repetition penalty
 
-# Experimental settings
-experiment:
-  name: "dnd_llm_baseline"
-  description: "Baseline Drag-and-Drop LLM experiment"
-  tags: ["baseline", "qwen", "sentence-bert"] 
+# Hardware Configuration
+device: "auto"  # auto, cuda, cpu
+mixed_precision: "fp16"  # fp16, bf16, fp32
+dataloader_num_workers: 4  # Number of dataloader workers
+pin_memory: true  # Whether to pin memory
+
+# Paths
+model_path: "saved_models/dnd_llm/model.pt"  # Path to saved model
+save_path: "saved_models/dnd_llm"  # Directory to save models
+results_path: "results/evaluation_results.json"  # Path to save evaluation results
+log_dir: "logs"  # Directory for logs
+cache_dir: "cache"  # Directory for cached data
+
+# Experiment Configuration
+experiment_name: "dnd_llm_full"  # Experiment name
+run_name: null  # Run name (auto-generated if null)
+seed: 42  # Random seed
+evaluate_after_training: true  # Whether to evaluate after training
+
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  use_wandb: false  # Whether to use Weights & Biases
+  use_tensorboard: true  # Whether to use TensorBoard
+  
+  # Wandb configuration
+  wandb:
+    project: "drag-drop-llm"
+    entity: null  # Wandb entity
+    tags: ["dnd-llm", "lora", "parameter-generation"]
+
+# Ablation Studies (Section 3.4)
+ablation:
+  enabled: false  # Whether to run ablation studies
+  studies:
+    - "no_noise_augmentation"
+    - "different_lora_ranks"
+    - "different_architectures"
+    
+# Efficiency Analysis (Section 3.5)  
+efficiency:
+  enabled: true  # Whether to run efficiency analysis
+  measure_memory: true  # Whether to measure memory usage
+  measure_inference_time: true  # Whether to measure inference time
+  compare_with_lora: true  # Whether to compare with traditional LoRA 
