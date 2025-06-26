@@ -132,12 +132,15 @@ dmypy.json
 outputs/
 logs/
 checkpoints/
-models/
-data/
-cache/
+# models/  # Commented out to allow tracking model code
+# Only ignore actual model weight files
 *.pth
 *.ckpt
 *.pt
+*.bin
+*.safetensors
+data/
+cache/
 *.pkl
 *.pickle
 
