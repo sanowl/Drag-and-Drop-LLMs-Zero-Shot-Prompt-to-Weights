@@ -222,12 +222,17 @@ The system uses YAML configuration files for easy customization. See `configs/de
 
 ## Citation
 
+If you find this repository useful, please cite work:
+
 ```bibtex
-@article{dnd_llm2024,
-  title={Drag-and-Drop LLMs: Zero-Shot Prompt to Weights},
-  author={Research Team},
-  journal={arXiv preprint},
-  year={2025}
+@misc{liang2025draganddropllmszeroshotprompttoweights,
+  title={Drag-and-Drop LLMs: Zero-Shot Prompt-to-Weights},
+  author={Zhiyuan Liang and Dongwen Tang and Yuhao Zhou and Xuanlei Zhao and Mingjia Shi and Wangbo Zhao and Zekai Li and Peihao Wang and Konstantin Schürholt and Damian Borth and Michael M. Bronstein and Yang You and Zhangyang Wang and Kai Wang},
+  year={2025},
+  eprint={2506.16406},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2506.16406}
 }
 ```
 
