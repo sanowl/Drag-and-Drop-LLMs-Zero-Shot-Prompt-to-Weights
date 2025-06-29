@@ -87,7 +87,9 @@ trainer = DnDTrainer(model, device='cuda')
 trainer.train(datasets, num_epochs=5000, batch_size=128)
 
 # Generate weights from prompts
-test_prompts = ["Solve common sense reasoning problems"]
+test_prompts = [
+    "An astronomer observes that a planet rotates faster after a meteorite impact. Which is the most likely effect of this increase in rotation?\\nA: Planetary density will decrease.\\nB: Planetary years will become longer.\\nC: Planetary days will become shorter.\\nD: Planetary gravity will become stronger."
+]
 generated_params = model(test_prompts)
 ```
 
@@ -134,7 +136,7 @@ python scripts/evaluate.py --checkpoint ./outputs/final_model.pth --datasets ARC
 # Generate weights from prompts
 python scripts/inference.py \
     --checkpoint ./outputs/final_model.pth \
-    --prompts "Solve common sense problems" "Generate Python code" \
+    --prompts "An astronomer observes that a planet rotates faster after a meteorite impact. A: Planetary density will decrease. B: Planetary years will become longer. C: Planetary days will become shorter. D: Planetary gravity will become stronger." "Write a Python function that returns the Fibonacci sequence up to n." \
     --output generated_weights.pth
 ```
 
@@ -152,7 +154,10 @@ model = DragAndDropLLM(
 )
 
 # Generate weights from prompts
-prompts = ["Solve math problems", "Generate Python code"]
+prompts = [
+    "What is the next prime number after 47?\\nA: 49\\nB: 51\\nC: 53\\nD: 55",
+    "Write a Python function that returns the Fibonacci sequence up to n."
+]
 generated_params = model(prompts)
 
 # Apply generated parameters
